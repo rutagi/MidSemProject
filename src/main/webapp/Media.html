@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Home</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+  /* Embedded CSS */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+.header {
+    text-align: center;
+    padding: 20px 0;
+    background-color: #333;
+}
+
+.header img {
+    max-width: 100%; /* Make the image responsive */
+    height: auto;
+}
+
+.menu {
+    list-style-type: none;
+    padding: 0;
+    text-align: center;
+    background-color: #007bff;
+    margin: 0;
+}
+
+.menu li {
+    display: inline-block;
+    position: relative;
+}
+
+.menu li a {
+    display: block;
+    padding: 15px 20px;
+    text-decoration: none;
+    color: #fff;
+    font-size: 18px;
+}
+
+.menu .dropdown {
+    display: none;
+    position: absolute;
+    background-color: #007bff;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    left: 0;
+    width: 200px;
+}
+
+.menu .dropdown li {
+    display: block;
+}
+
+.menu li:hover .dropdown {
+    display: block;
+}
+
+.menu .dropdown li a {
+    color: #fff;
+    font-size: 16px;
+}
+
+.section {
+    background-image: url('111.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+}
+
+.moving-letters {
+    font-size: 36px;
+    animation: moveLetters 2s infinite alternate;
+}
+
+@keyframes moveLetters {
+    from { transform: translateY(-10px); }
+    to { transform: translateY(10px); }
+}
+
+</style>
+</head>
+<body>
+<div class="header">
+  <img src="123.png" alt="img descr">
+ 
+</div>
+
+<ul class="menu">
+  <li><a href="../StudentRegistration/Home.html">home</a></li>
+  <li><a href="https://auca.ac.rw/about/">about</a></li>
+  <li>
+    <a href="#" class="dropdown-toggle">Admission</a>
+   
+  </li>
+  <li>
+    <a href="#" class="dropdown-toggle">Academic</a>
+    
+  </li>
+  <li>
+    <a href="#" class="dropdown-toggle">Media center</a>
+    <ul class="dropdown">
+      <li><a href="../StudentRegistration/Courses.html">course</a></li>
+      <li><a href="../StudentRegistration/CourseDefinition.html">Course definition</a></li>
+    </ul>
+  </li>
+  <li>
+    <a href="#" class="dropdown-toggle">Research</a>
+    <ul class="dropdown">
+      <li><a href="#">Course definition</a></li>
+    </ul>
+  </li>
+  <li><a href="https://auca.ac.rw/apply/">Apply</a></li>
+  <li><a href="login.html">Logout</a></li>
+</ul>
+
+<div class="section">
+  <div class="moving-letters"> ..... </div>
+</div>
+
+
+
+</body>
+</html>

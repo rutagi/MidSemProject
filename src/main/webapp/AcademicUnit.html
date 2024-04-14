@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Academic Management System</title>
+<style>
+    /* Embedded CSS */
+    body {
+        font-family: Arial, sans-serif;
+    }
+
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    table th, table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+
+    table th {
+        background-color: #f2f2f2;
+    }
+
+    button {
+        padding: 8px 16px;
+        margin-right: 10px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+
+    .error {
+        color: red;
+    }
+</style>
+
+<style>
+        body {
+            background-image: url('download.jpg'); /* Replace 'path/to/your/image.jpg' with the actual path to your image */
+            background-size: cover; /* This ensures the image covers the entire background */
+            /* You can add more background properties here as needed */
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Add Academic Unit</h2>
+    <label for="code">Code:</label> <input type="text" id="code"><br>
+    <label for="name">Name:</label> <input type="text" id="name"><br>
+    <label for="unityType">Unity Type:</label>
+    <select id="unityType">
+        <option value="PROGRAMME">PROGRAMME</option>
+        <option value="FACULTY">FACULTY</option>
+        <option value="DEPARTMENT">DEPARTMENT</option>
+    </select><br>
+    <label for="parentUnitId">Parent Unit ID:</label> <input type="text" id="parentUnitId"><br>
+    <button type="button" onclick="addAcademicUnit()">Add</button>
+    
+    <div id="academicUnitTable"></div>
+</div>
+
+<script>
+    
+     const addAcademicUnit = () => {
+        var code = document.getElementById('code').value;
+        var name = document.getElementById('name').value;
+        var unityType = document.getElementById('unityType').value;
+        var parentUnitId = document.getElementById('parentUnitId').value;
+       
+        
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'AcademicUnit?action=add', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 201) {
+                
+                loadAcademicUnits();
+                
+                document.getElementById('code').value = '';
+                document.getElementById('name').value = '';
+                document.getElementById('unityType').value = '';
+                document.getElementById('parentUnitId').value = '';
+            } else {
+                console.error('Failed to add academic unit. Status code: ' + xhr.status);
+            }
+            xhr.onerror = function() {
+                console.error('Failed to send request to the server.');
+            };
+            }
+       
+        
+        xhr.send(
+                '&code=' + encodeURIComponent(code) + '&name=' + encodeURIComponent(name) + '&unityType=' + encodeURIComponent(unityType) +'&parentUnitId=' + encodeURIComponent(parentUnitId)
+            );
+            console.log(xhr);
+            }
+      
+    
+   const loadAcademicUnits = () => {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', 'AcademicUnit?action=list', true);
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            var academicUnits = JSON.parse(xhr.responseText);
+            displayAcademicUnits(academicUnits);
+        } else {
+            console.error('Failed to load academic units. Status code: ' + xhr.status);
+        }
+    };
+   // console.log(xhr);
+    xhr.send();
+   }
+
+    
+    const displayAcademicUnits = (academicUnits) => {
+        let tableHtml = '<table><tr><th>Unit ID</th><th>Code</th><th>Name</th><th>Unity Type</th><th>Parent Unit ID</th><th>Action</th></tr>';
+        
+         academicUnits.forEach(function(academicUnit) {
+            tableHtml += '<tr><td>' + academicUnit.unitId + '</td><td>' + academicUnit.code + '</td><td>' + academicUnit.name + '</td><td>' + academicUnit.unityType + '</td><td>' + academicUnit.parentUnitId + '</td><td>' +
+                         '<button onclick="editAcademicUnit(' + academicUnit.unitId + ')">Edit</button>' +
+                         '<button onclick="deleteAcademicUnit(' + academicUnit.unitId + ')">Delete</button></td></tr>';
+         });
+        
+         tableHtml += '</table>';
+         document.getElementById('academicUnitTable').innerHTML = tableHtml;
+     };
+
+     
+     const deleteAcademicUnit = (unitId) => {
+         if (confirm('Are you sure you want to delete this academic unit?')) {
+             const xhr = new XMLHttpRequest();
+             xhr.open('GET',  'AcademicUnit?action=delete&id=' + unitId, true);
+             xhr.onload = function() {
+                 if (xhr.status === 200) {
+                    
+                     loadAcademicUnits();
+                 } else {
+                     console.error('Failed to delete academic unit. Status code: ' + xhr.status);
+                 }
+             };
+             xhr.send();
+         }
+     };
+
+     
+     const editAcademicUnit = (unitId) => {
+         
+         console.log('Editing academic unit with ID:', unitId);
+     };
+
+    
+     document.addEventListener('DOMContentLoaded', function() {
+         loadAcademicUnits();
+     });
+ </script>
+ </body>
+ </html>
+             

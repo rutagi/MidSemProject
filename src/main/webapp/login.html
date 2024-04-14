@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f1f1f1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .login-container {
+            background-color: #ffffff;
+            padding: 30px; /* Increased padding */
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 350px; /* Increased width */
+        }
+
+        .login-container h2 {
+            margin-top: 0;
+            text-align: center;
+            font-size: 24px; /* Increased font size */
+        }
+
+        .login-container form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .login-container form label {
+            margin-bottom: 10px; /* Increased margin */
+            font-size: 16px; /* Increased font size */
+        }
+
+        .login-container form input {
+            padding: 12px; /* Increased padding */
+            margin-bottom: 15px; /* Increased margin */
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 16px; /* Increased font size */
+        }
+
+        .login-container form button {
+            padding: 12px; /* Increased padding */
+            border: none;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: background-color 0.3s;
+            font-size: 16px; /* Increased font size */
+        }
+
+        .login-container form button:hover {
+            background-color: #0056b3;
+        }
+
+        .error-message {
+            color: red;
+            text-align: center;
+        }
+        
+    </style>
+    <style>
+        body {
+            background-image: url('download.jpg'); /* Replace 'path/to/your/image.jpg' with the actual path to your image */
+            background-size: cover; /* This ensures the image covers the entire background */
+            /* You can add more background properties here as needed */
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Login</h2>
+       
+        <form action="login" method="post" id="loginForm">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            <button type="submit">Login</button>
+        </form>
+        </form>
+        <p>Already have an account? <a href="../StudentRegistration/Registration.html">SignUp</a></p>
+    </div>
+
+    <script>
+    Form.reset();
+        // You can add JavaScript validation or other functionalities here if needed
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            // Example JavaScript validation (you can add more checks as needed)
+            var emailInput = document.getElementById('email');
+            var passwordInput = document.getElementById('password');
+
+            if (!isValidEmail(emailInput.value)) {
+                event.preventDefault(); // Prevent form submission
+                alert('Please enter a valid email address.');
+            }
+
+            // You can add more validation checks here for password length, etc.
+             function clearFields() {
+            document.getElementById('email').value = '';
+            document.getElementById('password').value = '';
+            }
+            
+             // Function to redirect to login page
+             function redirectToLogin() {
+                 window.location.href = 'login.html';
+             }
+
+             // Timeout variables
+             let timeoutTimer;
+             const TIMEOUT_DURATION = 60000; // 1 minute in milliseconds
+
+             // Function to reset the timeout timer
+             function resetTimeout() {
+                 clearTimeout(timeoutTimer);
+                 timeoutTimer = setTimeout(redirectToLogin, TIMEOUT_DURATION);
+             }
+
+             // Add event listeners for user interaction events
+            
+             // Initial setup
+             resetTimeout();
+        });
+
+        // Example email validation function (you can use more robust methods as well)
+        function isValidEmail(email) {
+            var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+    </script>
+</body>
+</html>

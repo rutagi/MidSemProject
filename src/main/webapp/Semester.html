@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Semester Management System</title>
+<style>
+/* Embedded CSS */
+body {
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table th, table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+table th {
+    background-color: #f2f2f2;
+}
+
+button {
+    padding: 8px 16px;
+    margin-right: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.error {
+    color: red;
+}
+</style>
+
+<style>
+        body {
+            background-image: url('download.jpg'); /* Replace 'path/to/your/image.jpg' with the actual path to your image */
+            background-size: cover; /* This ensures the image covers the entire background */
+            /* You can add more background properties here as needed */
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Semester Management System</h2>
+    <div>
+        <input type="text" id="semesterName" placeholder="Enter semester your In">
+        <input type="date" id="startDate">
+        <input type="date" id="endDate">
+        <button type="button" onClick="addSemester()">Add Semester</button>
+    </div>
+    <div id="semestersTable">
+        <!-- Semester table will be displayed here -->
+    </div>
+</div>
+
+<script>
+const addSemester = () => {
+	var semesterName = document.getElementById('semesterName').value;
+	var startDate = document.getElementById('startDate').value;
+    var endDate = document.getElementById('endDate').value;
+
+    if (semesterName.trim() === '') {
+        alert('Please enter a semester name.');
+        return;
+    }
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST','Semester?action=add', true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 201) {
+                loadSemesters(); // Reload semesters after adding
+                document.getElementById('semesterName').value = ''; // Clear input fields
+                document.getElementById('startDate').value = '';
+                document.getElementById('endDate').value = '';
+            } else {
+                console.error('Failed to add semester. Status code: ' + xhr.status);
+            }
+        }
+    };
+
+    xhr.onerror = function() {
+        console.error('Failed to send request to the server.');
+    };
+
+    xhr.send('action=add&semesterName=' + encodeURIComponent(semesterName) + '&startDate=' + encodeURIComponent(startDate) + '&endDate=' + encodeURIComponent(endDate));
+};
+
+const loadSemesters = () => {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', 'Semester?action=list', true);
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            var semester = JSON.parse(xhr.responseText);
+            displaySemesters(semester);
+        } else {
+            console.error('Failed to load semesters. Status code: ' + xhr.status);
+        }
+    };
+    xhr.send();
+};
+
+
+const displaySemesters = (semesters) => {
+    var tableHtml = '<table><tr><th>Semester ID</th><th>Name</th><th>Start Date</th><th>End Date</th><th>Action</th></tr>';
+    semesters.forEach(function(semester) {
+        tableHtml += '<tr><td>' + semester.semid + '</td><td>' + semester.name + '</td><td>' + semester.startdate + '</td><td>' + semester.enddate + '</td><td>' +
+                     '<button onclick="editSemester(' + semester.semid + ')">Edit</button>' +
+                     '<button onclick="deleteSemester(' + semester.semid + ')">Delete</button></td></tr>';
+    });
+    tableHtml += '</table>';
+    document.getElementById('semestersTable').innerHTML = tableHtml;
+};
+
+const deleteSemester = (semesterId) => {
+    if (confirm('Are you sure you want to delete this semester?')) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', 'Semester?action=delete&id=' + semesterId, true);
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                loadSemesters();
+            } else {
+                console.error('Failed to delete semester. Status code: ' + xhr.status);
+            }
+        };
+        xhr.send();
+    }
+};
+
+const editSemester = (semesterId) => {
+    // You can implement the edit functionality here, such as redirecting to an edit page
+    window.location.href = '/edit-semester?id=' + semesterId;
+    console.log('Editing semester with ID:', semesterId);
+};
+
+document.addEventListener('DOMContentLoaded', function() {
+    loadSemesters(); // Load semesters when the page is loaded
+});
+</script>
+</body>
+</html>

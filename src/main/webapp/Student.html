@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Management System</title>
+<style>
+   /* Embedded CSS */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa; /* Light gray background */
+}
+
+.container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    text-align: center;
+    color: #333; /* Dark gray text color */
+}
+
+.form-group {
+    display: flex; /* Use flexbox */
+    align-items: center; /* Center vertically */
+    margin-bottom: 15px; /* Adjust spacing between groups */
+}
+
+.form-group label {
+    flex: 1; /* Equal width for labels */
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="date"],
+input[type="password"],
+input[type="submit"] {
+    flex: 2; /* Twice as wide as labels */
+    padding: 12px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 2px solid #ccc; /* Light gray border */
+    border-radius: 6px;
+    outline: none;
+}
+
+input[type="submit"] {
+    background-color: #007bff; /* Blue button color */
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    outline: none;
+}
+
+input[type="submit"]:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #007bff; /* Blue header background */
+    color: #fff;
+}
+
+button {
+    background-color: #dc3545; /* Red button color */
+    color: #fff;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    outline: none;
+}
+
+button:hover {
+    background-color: #c82333; /* Darker red on hover */
+}
+
+/* Background image */
+body {
+    background-image: url('background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+</style>
+
+<style>
+        body {
+            background-image: url('download.jpg'); /* Replace 'path/to/your/image.jpg' with the actual path to your image */
+            background-size: cover; /* This ensures the image covers the entire background */
+            /* You can add more background properties here as needed */
+        }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Student Management System</h2>
+    <div>
+        <div class="form-group">
+            <label for="regNo">Registration Number:</label>
+            <input type="text" id="regNo" name="regNo" required>
+        </div>
+
+        <div class="form-group">
+            <label for="firstName">First Name:</label>
+            <input type="text" id="firstName" name="firstName" required>
+        </div>
+
+        <div class="form-group">
+            <label for="lastName">Last Name:</label>
+            <input type="text" id="lastName" name="lastName" required>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+
+        <div class="form-group">
+            <label for="phone">Phone Number:</label>
+            <input type="tel" id="phone" name="phone" required>
+        </div>
+
+        <div class="form-group">
+            <label for="dob">Date of Birth:</label>
+            <input type="date" id="dob" name="dob" required>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+
+        <input type="submit" value="Register" onclick="addStudent()">
+    </div>
+</div>
+
+<div class="container">
+    <h2>Students List</h2>
+    <div id="studentTable"></div>
+</div>
+
+<script>
+    // JavaScript for student management
+    const addStudent = () => {
+        var regNo = document.getElementById('regNo').value;
+        var firstName = document.getElementById('firstName').value;
+        var lastName = document.getElementById('lastName').value;
+        var email = document.getElementById('email').value;
+        var phone = document.getElementById('phone').value;
+        var dob = document.getElementById('dob').value;
+        var password = document.getElementById('password').value;
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'Student?action=add', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 201) {
+                    loadStudents();
+                    document.getElementById('regNo').value = '';
+                    document.getElementById('firstName').value = '';
+                    document.getElementById('lastName').value = '';
+                    document.getElementById('email').value = '';
+                    document.getElementById('phone').value = '';
+                    document.getElementById('dob').value = '';
+                    document.getElementById('password').value = '';
+                } else {
+                    console.error('Failed to add student. Status code: ' + xhr.status);
+                }
+            }
+        };
+        xhr.send(
+            'code=' + encodeURIComponent(regNo) + 
+            '&firstname=' + encodeURIComponent(firstName) + 
+            '&lastname=' + encodeURIComponent(lastName) + 
+            '&email=' + encodeURIComponent(email) + 
+            '&phone=' + encodeURIComponent(phone) + 
+            '&dateofbirth=' + encodeURIComponent(dob) + 
+            '&password=' + encodeURIComponent(password)
+        );
+    };
+
+    const loadStudents = () => {
+             var xhr = new XMLHttpRequest();
+        xhr.open('GET', 'Student?action=list', true);
+        xhr.onload = function() {
+            if (xhr.status === 200)
+ {
+                var students = JSON.parse(xhr.responseText);
+                displayStudents(students);
+            } else {
+                console.error('Failed to load students. Status code: ' + xhr.status);
+            }
+        };
+        xhr.send();
+    };
+
+    const displayStudents = (students) => {
+        let tableHtml = '<table><tr><th>ID</th><th>First Name</th><th>Last Name</th><th>Email</th><th>Phone</th><th>Date of Birth</th><th>Action</th></tr>';
+        students.forEach(function(student) {
+            tableHtml += '<tr><td>' + student.id + '</td><td>' + student.firstName + '</td><td>' + student.lastName + '</td><td>' + student.email + '</td><td>' + student.phone + '</td><td>' + student.dob + '</td><td>' +
+                         '<button onclick="editstudent(' + student.id + ')">Edit</button>' +
+                         '<button onclick="deletestudent(' + student.id + ')">Delete</button></td></tr>';
+        });
+        tableHtml += '</table>';
+        document.getElementById('studentTable').innerHTML = tableHtml;
+    };
+
+    const deleteStudent = (studentId) => {
+        if (confirm('Are you sure you want to delete this student?')) {
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', 'Student?action=delete&id=' + studentId, true);
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    loadStudents();
+                } else {
+                    console.error('Failed to delete student. Status code: ' + xhr.status);
+                }
+            };
+            xhr.send();
+        }
+    };
+
+    const editStudent = (studentId) => {
+        console.log('Editing student with ID:', studentId);
+        // Implement edit functionality as required
+    };
+
+    document.addEventListener('DOMContentLoaded', function() {
+        loadStudents();
+    });
+</script>
+
+</body>
+</html>
+     
